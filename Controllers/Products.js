@@ -67,6 +67,7 @@ const deleteProduct=async(req,res)=>{
 }
 
 
+
 const updateProduct=async(req,res)=>{
   const {productId}=req.body
   try {
