@@ -53,7 +53,6 @@ const Third = async (req,res) => {
           });
           console.log("subscription created successfully")
 
-          // return the client secret and subscription id
           return res.json({
               clientSecret: subscription.latest_invoice.payment_intent.client_secret,
               subscriptionId: subscription.id,
