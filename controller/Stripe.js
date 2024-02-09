@@ -1,4 +1,4 @@
-const stripe = require('stripe')("sk_test_51Ofg1NSD713Gba2a8ljDNgELuDUNNKkG5N5ausUqfjIxYXxnG4iC2Tt73qOKdl01riAVu1LwQTFIqbE1g5ES9iNh00Nh11x0IH");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const [basic, premium, business] = ['price_1OfgZFSD713Gba2ac7phjrww', 'price_1Ofge7SD713Gba2ai5nA8rjs', 'price_1OfghJSD713Gba2a1SIF6pPP'];
 
 
@@ -109,11 +109,9 @@ const Third = async (req,res) => {
   }
        // Retrieve the Subscriptions
 
-  
   const listSubscription =async(req,res)=>{
       try {
-        const subscriptions = await stripe.subscriptions.list({
-          limit:3
+        const subscriptions = await stripe.subscriptions.list({  
         })  
         console.log("Subscriptions retrieved successfully")
         return   res.json({subscriptions})
@@ -130,7 +128,7 @@ const Third = async (req,res) => {
       try {
           const subscriptionId = req.params.subscriptionId;
           const canceledSubscription = await stripe.subscriptions.cancel(subscriptionId);
-          return res.json("Subscription Deleted Successfully",cancelSubscription);
+          res.status(201).json("Subscription Deleted Successfully",canceledSubscription);
       } catch (error) {
         console.log(error)  
         res.json({message:error})
@@ -158,7 +156,50 @@ const Third = async (req,res) => {
           return e;
       }
   };
-  
+
+  const Order=async(req,res)=>{
+    try {
+        const userId=req.params.userId
+        const invoices = await stripe.invoices.list({
+            customer: userId,
+          });
+      
+          res.json(invoices.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    }
+    
+    
+    const AllOrders = async (req, res) => {
+        try {
+          const invoices = await stripe.invoices.list({
+            limit: 10,
+          });
+      
+          const allOrders = invoices.data.map(invoice => ({
+            orderId: invoice.id,
+            customer: invoice.customer,
+            amount: invoice.amount_due,
+            name :invoice.customer_name,
+            email:invoice.customer_email,
+            frequency:invoice.frequency
+          }));
+      
+          res.json(allOrders);
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+      };
+      
+
+
+
+
+
+
   
           //Refund Of Subscription 
 
@@ -171,4 +212,4 @@ const refundSubscription=async(req,res)=>{
   }
 }
 
-  module.exports = {Third,updateSubscription, retrieveSubscription,listSubscription,cancelSubscription,stripeSession} ;
+  module.exports = {Third,updateSubscription, retrieveSubscription,listSubscription,cancelSubscription,stripeSession,Order,AllOrders} ;

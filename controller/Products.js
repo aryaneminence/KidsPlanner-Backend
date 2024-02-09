@@ -1,4 +1,4 @@
-const stripe = require('stripe')("sk_test_51Ofg1NSD713Gba2a8ljDNgELuDUNNKkG5N5ausUqfjIxYXxnG4iC2Tt73qOKdl01riAVu1LwQTFIqbE1g5ES9iNh00Nh11x0IH");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const [basic, premium, business] = ['price_1OfgZFSD713Gba2ac7phjrww', 'price_1Ofge7SD713Gba2ai5nA8rjs', 'price_1OfghJSD713Gba2a1SIF6pPP'];
 
 // create Subscription
@@ -79,4 +79,4 @@ const updateProduct=async(req,res)=>{
 }
 
 
-module.exports={creatProduct,getProducts,getproductById,deleteProduct}
+module.exports={creatProduct,getProducts,getproductById,deleteProduct,updateProduct}

@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const {Third,updateSubscription,retrieveSubscription,listSubscription,cancelSubscription}=require('../controller/Stripe')
+const {Third,updateSubscription,retrieveSubscription,listSubscription,cancelSubscription, AllOrders, Order}=require('../controller/Stripe')
 const { creatProduct,getProducts,getproductById, deleteProduct}=require('../controller/Products')
 
 
@@ -14,9 +14,9 @@ router.get('/listsub',listSubscription)
 
 router.delete("/cansub/:subscriptionId",cancelSubscription)
 
+router.get('/orders',AllOrders)
 
-
-
+router.get('/order/:id',Order)
 
 router.post('/addproduct',creatProduct)
 
